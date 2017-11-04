@@ -62,6 +62,10 @@ class Train implements TrainInterface
             && $this->getLeaveTime() <= $train->getLeaveTime()) {
             return true;
         }
+        if ($this->getArriveTime() < $train->getArriveTime()
+            && $this->getLeaveTime() > $train->getLeaveTime()) {
+            return true;
+        }
         return false;
     }
 }
