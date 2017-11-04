@@ -18,11 +18,14 @@ class StationTest extends TestCase
         $this->station = new Station();
     }
     
-    public function testAddTrain()
+    public function testAddRemoveTrain()
     {
         $train = new Train();
-        $this->station->addTrain($train);
 
+        $this->station->addTrain($train);
         $this->assertSame(1, $this->station->countTrains());
+
+        $this->station->removeTrain($train);
+        $this->assertSame(0, $this->station->countTrains());
     }
 }
