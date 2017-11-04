@@ -1,0 +1,26 @@
+{
+  "name": "ivir3zam/train-station",
+  "type": "library",
+  "description": "This is a test project for calculating lines needed for a Train Station",
+  "keywords": [
+    "train-station"
+  ],
+  "homepage": "https://github.com/IVIR3zaM/TrainStation",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mohammadreza Maghoul",
+      "email": "m.reza.maghool@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "IVIR3zaM\\TrainStation\\": "src",
+      "IVIR3zaM\\TrainStation\\Tests\\": "tests"
+    }
+  },
+  "minimum-stability": "stable"
+}
