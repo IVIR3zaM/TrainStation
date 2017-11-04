@@ -51,4 +51,17 @@ class Train implements TrainInterface
     {
         return $this->leaveDate;
     }
+
+    public function hasConflict(TrainInterface $train) : bool
+    {
+        if ($this->getArriveTime() >= $train->getArriveTime()
+            && $this->getArriveTime() <= $train->getLeaveTime()) {
+            return true;
+        }
+        if ($this->getLeaveTime() >= $train->getArriveTime()
+            && $this->getLeaveTime() <= $train->getLeaveTime()) {
+            return true;
+        }
+        return false;
+    }
 }

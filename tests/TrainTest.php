@@ -30,4 +30,16 @@ class TrainTest extends TestCase
 
         $this->assertSame($leave->getTimestamp(), $this->train->getLeaveTime()->getTimestamp());
     }
+
+    public function testHaveConflict()
+    {
+        $this->train->setArriveTime(new DateTime('+1 Hour'));
+        $this->train->setLeaveTime(new DateTime('+2 Hour'));
+
+        $train = new Train(new DateTime('+2 Hour, +1 Minute'), new DateTime('+3 Hour'));
+        $this->assertFalse($this->train->hasConflict($train));
+
+        $train->setArriveTime($this->train->getLeaveTime());
+        $this->assertTrue($this->train->hasConflict($train));
+    }
 }

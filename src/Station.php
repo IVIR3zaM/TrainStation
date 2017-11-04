@@ -37,13 +37,7 @@ class Station implements StationInterface
             foreach ($lines as &$line) {
                 $accepted = true;
                 foreach ($line as $scheduledTrain) {
-                    if ($train->getArriveTime()->getTimestamp() >= $scheduledTrain->getArriveTime()->getTimestamp()
-                     && $train->getArriveTime()->getTimestamp() <= $scheduledTrain->getLeaveTime()->getTimestamp()) {
-                        $accepted = false;
-                        break;
-                    }
-                    if ($train->getLeaveTime()->getTimestamp() >= $scheduledTrain->getArriveTime()->getTimestamp()
-                        && $train->getLeaveTime()->getTimestamp() <= $scheduledTrain->getLeaveTime()->getTimestamp()) {
+                    if ($train->hasConflict($scheduledTrain)) {
                         $accepted = false;
                         break;
                     }

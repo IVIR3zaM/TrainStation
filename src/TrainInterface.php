@@ -12,4 +12,6 @@ interface TrainInterface
     public function setLeaveTime(DateTimeInterface $date) : TrainInterface;
 
     public function getLeaveTime() : DateTimeInterface;
+    
+    public function hasConflict(TrainInterface $train) : bool;
 }
