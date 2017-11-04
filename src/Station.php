@@ -37,24 +37,38 @@ class Station implements StationInterface
         return true;
     }
 
+    protected function sortTrains() : array
+    {
+        uasort($this->trains, function (TrainInterface $train1, TrainInterface $train2) {
+            if ($train1->getArriveTime()->getTimestamp() == $train2->getArriveTime()->getTimestamp()) {
+                return 0;
+            }
+            return $train1->getArriveTime()->getTimestamp() < $train2->getArriveTime()->getTimestamp() ? -1 : 1;
+        });
+        return $this->trains;
+    }
+
     public function calculateLines() : array
     {
         $lines = [];
 
-        foreach ($this->trains as $train) {
+        $trains = $this->sortTrains();
+
+        while (($train = array_shift($trains))) {
             $inserted = false;
-            foreach ($lines as &$line) {
+            $lineIndex = 0;
+            foreach ($lines as $index => $line) {
                 $inserted = $this->canInsertTrain($line, $train);
                 if ($inserted) {
-                    $line[] = $train;
+                    $lineIndex = $index;
                     break;
                 }
             }
             if (!$inserted) {
-                $lines[] = [$train];
+                $lineIndex = count($lines);
             }
+            $lines[$lineIndex][] = $train;
         }
-
         return $lines;
     }
 }

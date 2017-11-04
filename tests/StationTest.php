@@ -50,4 +50,38 @@ class StationTest extends TestCase
         $train3->setLeaveTime(new DateTime('+1 Hour, -1 Second'));
         $this->assertCount(1, $this->station->calculateLines());
     }
+
+    public function testComplexCalculateLines()
+    {
+        $train1 = new Train(new DateTime('now'), new DateTime('+1 Hour'));
+        $train2 = new Train(new DateTime('+1 Hour, +30 Minute'), new DateTime('+3 Hour'));
+        $train3 = new Train(new DateTime('+30 Minute'), new DateTime('+1 Hour, +29 Minute'));
+        $train4 = new Train(new DateTime('+1 Hour, +1 Minute'), new DateTime('+2 Hour'));
+
+        $this->station->addTrain($train1);
+        $this->station->addTrain($train2);
+        $this->station->addTrain($train3);
+        $this->station->addTrain($train4);
+
+        $this->assertSame(4, $this->station->countTrains());
+        $this->assertCount(2, $this->station->calculateLines());
+    }
+
+    public function testMoreComplexCalculateLines()
+    {
+        $train1 = new Train(new DateTime('now'), new DateTime('+1 Hour'));
+        $train2 = new Train(new DateTime('+2 Hour'), new DateTime('+3 Hour'));
+        $train3 = new Train(new DateTime('+1 Hour, +1 Minute'), new DateTime('+3 Hour'));
+        $train4 = new Train(new DateTime('+1 Hour, +5 Minute'), new DateTime('+1 Hour, +59 Minute'));
+        $train5 = new Train(new DateTime('now'), new DateTime('+1 Hour'));
+
+        $this->station->addTrain($train1);
+        $this->station->addTrain($train2);
+        $this->station->addTrain($train3);
+        $this->station->addTrain($train4);
+        $this->station->addTrain($train5);
+
+        $this->assertSame(5, $this->station->countTrains());
+        $this->assertCount(2, $this->station->calculateLines());
+    }
 }
