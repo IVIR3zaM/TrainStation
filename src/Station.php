@@ -28,6 +28,15 @@ class Station implements StationInterface
         return count($this->trains);
     }
 
+    protected function canInsertTrain(array $line, TrainInterface $train) : bool {
+        foreach ($line as $scheduledTrain) {
+            if ($train->hasConflict($scheduledTrain)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public function calculateLines() : array
     {
         $lines = [];
@@ -35,16 +44,9 @@ class Station implements StationInterface
         foreach ($this->trains as $train) {
             $inserted = false;
             foreach ($lines as &$line) {
-                $accepted = true;
-                foreach ($line as $scheduledTrain) {
-                    if ($train->hasConflict($scheduledTrain)) {
-                        $accepted = false;
-                        break;
-                    }
-                }
-                if ($accepted) {
+                $inserted = $this->canInsertTrain($line, $train);
+                if ($inserted) {
                     $line[] = $train;
-                    $inserted = true;
                     break;
                 }
             }
