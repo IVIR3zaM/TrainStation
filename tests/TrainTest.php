@@ -41,5 +41,11 @@ class TrainTest extends TestCase
 
         $train->setArriveTime($this->train->getLeaveTime());
         $this->assertTrue($this->train->hasConflict($train));
+
+        $train->setArriveTime(new DateTime('now'));
+        $this->assertTrue($this->train->hasConflict($train));
+
+        $train->setLeaveTime(new DateTime('+1 Hour, -1 Second'));
+        $this->assertFalse($this->train->hasConflict($train));
     }
 }
