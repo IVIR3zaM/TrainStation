@@ -1,0 +1,18 @@
+language: php
+
+php:
+  - 7.0
+  - 7.1
+
+script:
+  - composer install --no-interaction --prefer-source
+  - composer validate
+  - composer require codeclimate/php-test-reporter
+  - composer require phpunit/phpunit
+  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+after_success:
+  - CODECLIMATE_REPO_TOKEN="914b0dee3ae94210720b5f93bb29f2fd11377c700173e6bb398867e7fdd5c426" vendor/bin/test-reporter
+
+notifications:
+email: "m.reza.maghool@gmail.com"
