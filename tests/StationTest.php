@@ -40,5 +40,14 @@ class StationTest extends TestCase
 
         $this->assertSame(2, $this->station->countTrains());
         $this->assertCount(1, $this->station->calculateLines());
+
+        $train3 = new Train(new DateTime('now'), new DateTime('+1 Hour'));
+
+        $this->station->addTrain($train3);
+        $this->assertSame(3, $this->station->countTrains());
+        $this->assertCount(2, $this->station->calculateLines());
+
+        $train3->setLeaveTime(new DateTime('+1 Hour, -1 Second'));
+        $this->assertCount(1, $this->station->calculateLines());
     }
 }
