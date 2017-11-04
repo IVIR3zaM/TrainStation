@@ -7,7 +7,7 @@ class Station implements StationInterface
      * @var TrainInterface[]
      */
     protected $trains = [];
-    
+
     public function addTrain(TrainInterface $train) : StationInterface
     {
         $this->trains[spl_object_hash($train)] = $train;
@@ -22,13 +22,14 @@ class Station implements StationInterface
         }
         return $this;
     }
-    
+
     public function countTrains() : int
     {
         return count($this->trains);
     }
 
-    protected function canInsertTrain(array $line, TrainInterface $train) : bool {
+    protected function canInsertTrain(array $line, TrainInterface $train) : bool
+    {
         foreach ($line as $scheduledTrain) {
             if ($train->hasConflict($scheduledTrain)) {
                 return false;
@@ -48,25 +49,27 @@ class Station implements StationInterface
         return $this->trains;
     }
 
+    protected function calculateProperLine(array $lines, TrainInterface $train) : int
+    {
+        $lineIndex = null;
+        foreach ($lines as $index => $line) {
+            if ($this->canInsertTrain($line, $train)) {
+                $lineIndex = $index;
+                break;
+            }
+        }
+        if ($lineIndex === null) {
+            $lineIndex = count($lines);
+        }
+        return $lineIndex;
+    }
+
     public function calculateLines() : array
     {
         $lines = [];
-
         $trains = $this->sortTrains();
-
         while (($train = array_shift($trains))) {
-            $inserted = false;
-            $lineIndex = 0;
-            foreach ($lines as $index => $line) {
-                $inserted = $this->canInsertTrain($line, $train);
-                if ($inserted) {
-                    $lineIndex = $index;
-                    break;
-                }
-            }
-            if (!$inserted) {
-                $lineIndex = count($lines);
-            }
+            $lineIndex = $this->calculateProperLine($lines, $train);
             $lines[$lineIndex][] = $train;
         }
         return $lines;
