@@ -27,4 +27,38 @@ class Station implements StationInterface
     {
         return count($this->trains);
     }
+
+    public function calculateLines() : array
+    {
+        $lines = [];
+
+        foreach ($this->trains as $train) {
+            $inserted = false;
+            foreach ($lines as &$line) {
+                $accepted = true;
+                foreach ($line as $scheduledTrain) {
+                    if ($train->getArriveTime()->getTimestamp() >= $scheduledTrain->getArriveTime()->getTimestamp()
+                     && $train->getArriveTime()->getTimestamp() <= $scheduledTrain->getLeaveTime()->getTimestamp()) {
+                        $accepted = false;
+                        break;
+                    }
+                    if ($train->getLeaveTime()->getTimestamp() >= $scheduledTrain->getArriveTime()->getTimestamp()
+                        && $train->getLeaveTime()->getTimestamp() <= $scheduledTrain->getLeaveTime()->getTimestamp()) {
+                        $accepted = false;
+                        break;
+                    }
+                }
+                if ($accepted) {
+                    $line[] = $train;
+                    $inserted = true;
+                    break;
+                }
+            }
+            if (!$inserted) {
+                $lines[] = [$train];
+            }
+        }
+
+        return $lines;
+    }
 }

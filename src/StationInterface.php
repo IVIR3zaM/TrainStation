@@ -8,4 +8,6 @@ interface StationInterface
     public function removeTrain(TrainInterface $train) : StationInterface;
 
     public function countTrains() : int;
+
+    public function calculateLines() : array;
 }
