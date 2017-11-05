@@ -6,6 +6,7 @@ use IVIR3zaM\TrainStation\Train;
 use IVIR3zaM\TrainStation\Lines;
 use IVIR3zaM\TrainStation\LinesInterface;
 use DateTime;
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 class LinesTest extends TestCase
@@ -79,5 +80,15 @@ class LinesTest extends TestCase
         $this->assertInstanceOf(LineInterface::class, $line2);
 
         $this->assertNotSame($line1, $line2);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testInvalidProperLine()
+    {
+        $this->lines = new LinesFake();
+        $train = new Train(new DateTime('now'), new DateTime('+1 Hour'));
+        $this->lines->addTrain($train);
     }
 }
