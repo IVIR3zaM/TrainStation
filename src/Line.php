@@ -4,23 +4,13 @@ namespace IVIR3zaM\TrainStation;
 use DateTimeInterface;
 use DateTime;
 
-class Line implements LineInterface
+class Line extends Iterator implements LineInterface
 {
-    /**
-     * @var TrainInterface[]
-     */
-    protected $trains = [];
 
     /**
      * @var DateTimeInterface
      */
     protected $latestLeaveTime;
-
-
-    /**
-     * @var int
-     */
-    protected $position = 0;
 
     public function __construct()
     {
@@ -29,7 +19,7 @@ class Line implements LineInterface
 
     public function addTrain(TrainInterface $train) : LineInterface
     {
-        $this->trains[] = $train;
+        $this->objects[] = $train;
         if ($train->getLeaveTime() > $this->getLatestLeaveTime()) {
             $this->setLatestLeaveTime($train->getLeaveTime());
         }
@@ -45,37 +35,5 @@ class Line implements LineInterface
     {
         $this->latestLeaveTime = $date;
         return $this;
-    }
-
-    public function current()
-    {
-        if (isset($this->trains[$this->position])) {
-            return $this->trains[$this->position];
-        }
-    }
-
-    public function key() : int
-    {
-        return $this->position;
-    }
-
-    public function next()
-    {
-        $this->position++;
-    }
-
-    public function rewind()
-    {
-        $this->position = 0;
-    }
-
-    public function valid() : bool
-    {
-        return isset($this->trains[$this->position]);
-    }
-
-    public function count() : int
-    {
-        return count($this->trains);
     }
 }
