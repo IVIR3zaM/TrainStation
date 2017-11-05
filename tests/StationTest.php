@@ -1,6 +1,7 @@
 <?php
 namespace IVIR3zaM\TrainStation\Tests;
 
+use IVIR3zaM\TrainStation\Lines;
 use IVIR3zaM\TrainStation\Station;
 use IVIR3zaM\TrainStation\StationInterface;
 use IVIR3zaM\TrainStation\Train;
@@ -16,7 +17,7 @@ class StationTest extends TestCase
 
     public function setUp()
     {
-        $this->station = new Station();
+        $this->station = new Station(new Lines());
     }
     
     public function testAddRemoveTrain()

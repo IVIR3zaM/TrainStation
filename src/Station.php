@@ -8,6 +8,27 @@ class Station implements StationInterface
      */
     protected $trains = [];
 
+    /**
+     * @var LinesInterface
+     */
+    protected $lines;
+    
+    public function __construct(LinesInterface $lines)
+    {
+        $this->setLines($lines);
+    }
+
+    public function setLines(LinesInterface $lines) : StationInterface
+    {
+        $this->lines = $lines;
+        return $this;
+    }
+
+    public function getLines() : LinesInterface
+    {
+        return $this->lines;
+    }
+
     public function addTrain(TrainInterface $train) : StationInterface
     {
         $this->trains[spl_object_hash($train)] = $train;
@@ -28,16 +49,6 @@ class Station implements StationInterface
         return count($this->trains);
     }
 
-    protected function canInsertTrain(array $line, TrainInterface $train) : bool
-    {
-        foreach ($line as $scheduledTrain) {
-            if ($train->hasConflict($scheduledTrain)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     protected function sortTrains() : array
     {
         uasort($this->trains, function (TrainInterface $train1, TrainInterface $train2) {
@@ -49,29 +60,13 @@ class Station implements StationInterface
         return $this->trains;
     }
 
-    protected function calculateProperLine(array $lines, TrainInterface $train) : int
+    public function calculateLines() : LinesInterface
     {
-        $lineIndex = null;
-        foreach ($lines as $index => $line) {
-            if ($this->canInsertTrain($line, $train)) {
-                $lineIndex = $index;
-                break;
-            }
-        }
-        if ($lineIndex === null) {
-            $lineIndex = count($lines);
-        }
-        return $lineIndex;
-    }
-
-    public function calculateLines() : array
-    {
-        $lines = [];
+        $this->getLines()->reset();
         $trains = $this->sortTrains();
-        while (($train = array_shift($trains))) {
-            $lineIndex = $this->calculateProperLine($lines, $train);
-            $lines[$lineIndex][] = $train;
+        foreach ($trains as $train) {
+            $this->getLines()->addTrain($train);
         }
-        return $lines;
+        return $this->getLines();
     }
 }

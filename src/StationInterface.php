@@ -9,5 +9,9 @@ interface StationInterface
 
     public function countTrains() : int;
 
-    public function calculateLines() : array;
+    public function setLines(LinesInterface $lines) : StationInterface;
+
+    public function getLines() : LinesInterface;
+
+    public function calculateLines() : LinesInterface;
 }
