@@ -85,4 +85,16 @@ class StationTest extends TestCase
         $this->assertCount(5, $this->station);
         $this->assertCount(2, $this->station->calculateLines());
     }
+
+    public function testThousandsOfTrains()
+    {
+        //TODO pass this test faster
+        $train = new Train(new DateTime('now'), new DateTime('+1 Hour'));
+        for($i = 0; $i < 1000; $i++) {
+            $this->station->addTrain($train);
+        }
+
+        $this->assertCount(1000, $this->station);
+        $this->assertCount(1000, $this->station->calculateLines());
+    }
 }
