@@ -48,7 +48,7 @@ class StationTest extends TestCase
         $this->assertCount(3, $this->station);
         $this->assertCount(2, $this->station->calculateLines());
 
-        $train3->setLeaveTime(new DateTime('+1 Hour, -1 Second'));
+        $train3->setLeaveTime(new DateTime('+1 Hour, -10 Second'));
         $this->assertCount(1, $this->station->calculateLines());
     }
 
