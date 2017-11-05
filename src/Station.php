@@ -1,18 +1,13 @@
 <?php
 namespace IVIR3zaM\TrainStation;
 
-class Station implements StationInterface
+class Station extends Iterator implements StationInterface
 {
-    /**
-     * @var TrainInterface[]
-     */
-    protected $trains = [];
-
     /**
      * @var LinesInterface
      */
     protected $lines;
-    
+
     public function __construct(LinesInterface $lines)
     {
         $this->setLines($lines);
@@ -31,33 +26,38 @@ class Station implements StationInterface
 
     public function addTrain(TrainInterface $train) : StationInterface
     {
-        $this->trains[spl_object_hash($train)] = $train;
+        $this->objects[] = $train;
         return $this;
     }
 
     public function removeTrain(TrainInterface $train) : StationInterface
     {
-        $index = spl_object_hash($train);
-        if (isset($this->trains[$index])) {
-            unset($this->trains[$index]);
+        foreach ($this->objects as $index => $value) {
+            if ($value === $train) {
+                $this->removeTrainByIndex($index);
+                break;
+            }
         }
         return $this;
     }
 
-    public function countTrains() : int
+    public function removeTrainByIndex(int $index) : StationInterface
     {
-        return count($this->trains);
+        if (isset($this->objects[$index])) {
+            unset($this->objects[$index]);
+        }
+        return $this;
     }
 
     protected function sortTrains() : array
     {
-        uasort($this->trains, function (TrainInterface $train1, TrainInterface $train2) {
+        usort($this->objects, function (TrainInterface $train1, TrainInterface $train2) {
             if ($train1->getArriveTime()->getTimestamp() == $train2->getArriveTime()->getTimestamp()) {
                 return 0;
             }
             return $train1->getArriveTime()->getTimestamp() < $train2->getArriveTime()->getTimestamp() ? -1 : 1;
         });
-        return $this->trains;
+        return $this->objects;
     }
 
     public function calculateLines() : LinesInterface

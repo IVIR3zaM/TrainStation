@@ -1,13 +1,13 @@
 <?php
 namespace IVIR3zaM\TrainStation;
 
-interface StationInterface
+interface StationInterface extends \Countable, \Iterator
 {
     public function addTrain(TrainInterface $train) : StationInterface;
 
     public function removeTrain(TrainInterface $train) : StationInterface;
 
-    public function countTrains() : int;
+    public function removeTrainByIndex(int $index) : StationInterface;
 
     public function setLines(LinesInterface $lines) : StationInterface;
 

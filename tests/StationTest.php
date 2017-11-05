@@ -25,10 +25,10 @@ class StationTest extends TestCase
         $train = new Train();
 
         $this->station->addTrain($train);
-        $this->assertSame(1, $this->station->countTrains());
+        $this->assertCount(1, $this->station);
 
         $this->station->removeTrain($train);
-        $this->assertSame(0, $this->station->countTrains());
+        $this->assertCount(0, $this->station);
     }
 
     public function testCalculateLines()
@@ -39,13 +39,13 @@ class StationTest extends TestCase
         $this->station->addTrain($train1);
         $this->station->addTrain($train2);
 
-        $this->assertSame(2, $this->station->countTrains());
+        $this->assertCount(2, $this->station);
         $this->assertCount(1, $this->station->calculateLines());
 
         $train3 = new Train(new DateTime('now'), new DateTime('+1 Hour'));
 
         $this->station->addTrain($train3);
-        $this->assertSame(3, $this->station->countTrains());
+        $this->assertCount(3, $this->station);
         $this->assertCount(2, $this->station->calculateLines());
 
         $train3->setLeaveTime(new DateTime('+1 Hour, -1 Second'));
@@ -64,7 +64,7 @@ class StationTest extends TestCase
         $this->station->addTrain($train3);
         $this->station->addTrain($train4);
 
-        $this->assertSame(4, $this->station->countTrains());
+        $this->assertCount(4, $this->station);
         $this->assertCount(2, $this->station->calculateLines());
     }
 
@@ -82,7 +82,7 @@ class StationTest extends TestCase
         $this->station->addTrain($train4);
         $this->station->addTrain($train5);
 
-        $this->assertSame(5, $this->station->countTrains());
+        $this->assertCount(5, $this->station);
         $this->assertCount(2, $this->station->calculateLines());
     }
 }
